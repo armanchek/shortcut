@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  url-shortener:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    command: npm start
+    depends_on:
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
